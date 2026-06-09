@@ -1,0 +1,381 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock title %} | Friday Originals</title>
+
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+
+    <!-- ICONS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/friday.css' %}">
+</head>
+
+<body>
+
+    <!-- LUXURY INTRO SPLASH -->
+    {% if request.path == '/' and not request.session.skip_home_reveal %}
+    <div id="luxury-intro" class="luxury-intro">
+        <script>
+            if (sessionStorage.getItem("luxury_intro_played") === "true") {
+                document.getElementById("luxury-intro").style.display = "none";
+            } else {
+                document.body.classList.add("intro-active");
+            }
+        </script>
+        <div class="intro-frame"></div>
+
+        <div class="intro-content-wrapper">
+            <!-- The 3D Floating Hanger & Shirt -->
+            <div class="hanger-container">
+                <div class="hanger-3d">
+                    <img class="hanger-img" src="{% static 'image/product_hanger_intro.png' %}" alt="Friday Originals">
+                    <div class="hanger-shadow"></div>
+                </div>
+            </div>
+
+            <div class="intro-brand">
+                <span class="brand-title">FRIDAY ORIGINALS</span>
+                <div class="brand-tagline">minimal fit. maximum intent.</div>
+                <div class="intro-separator"></div>
+                <div class="intro-enter">
+                    <span class="enter-text">Enter Experience</span>
+                    <span class="enter-arrow"><i class="bi bi-arrow-right-short"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- SCROLL PROGRESS -->
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar"></div>
+    </div>
+
+    <!-- PAGE LOADER -->
+    <div id="page-transition">
+        <div class="transition-inner">
+            <div class="transition-word">
+                <span>F</span><span>R</span><span>I</span><span>D</span><span>A</span><span>Y</span><span>&nbsp;</span><span>O</span><span>R</span><span>I</span><span>G</span><span>I</span><span>N</span><span>A</span><span>L</span><span>S</span>
+            </div>
+            <div class="transition-line"></div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container-fluid">
+
+            <!-- MOBILE HAMBURGER -->
+            <button class="navbar-toggler custom-toggler border-0 shadow-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#mobileMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+
+            <ul class="navbar-nav left-nav desktop-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'hii' %}">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/shop/">Shop</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/about/">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact/">Contact</a>
+                </li>
+            </ul>
+
+            <!-- CENTER LOGO -->
+            <a class="navbar-brand center-brand" href="{% url 'hii' %}">
+                <img src="{% static 'image/new1.png' %}" alt="Friday Originals" class="nav-logo">
+            </a>
+
+            <div class="d-flex align-items-center ms-auto">
+
+                <!-- CART -->
+                <a href="/cart/" class="btn p-0 border-0 bg-transparent cart-btn">
+
+                    <svg class="cart-icon" viewBox="0 0 24 24">
+                        <path d="M6 7V6a6 6 0 0 1 12 0v1h3v15H3V7h3z
+                             M8 7h8V6a4 4 0 0 0-8 0v1z" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                    <span id="cart-count" class="cart-badge">
+                        {% if cart %}{{ cart|length }}{% else %}0{% endif %}
+                    </span>
+                </a>
+
+                <!-- PROFILE -->
+                <a href="javascript:void(0);" class="profile-btn" id="profile-trigger"
+                    data-auth="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+                    data-profile-url="{% url 'profile' %}">
+
+                    <svg class="profile-icon" viewBox="0 0 24 24">
+                        <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8
+                             M4 20a8 8 0 0 1 16 0" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </a>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start mobile-drawer" tabindex="-1" id="mobileMenu">
+
+        <div class="offcanvas-header">
+            <h5>Explore</h5>
+
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas">
+            </button>
+        </div>
+
+        <div class="offcanvas-body">
+
+            <a href="{% url 'hii' %}" class="drawer-link">Home</a>
+            <a href="/shop/" class="drawer-link">Shop</a>
+            <a href="/about/" class="drawer-link">About</a>
+            <a href="/contact/" class="drawer-link">Contact</a>
+
+        </div>
+    </div>
+    <!-- AUTH POPUP -->
+    <div id="auth-popup" class="auth-popup hidden">
+        <div class="auth-box">
+
+            <button class="close-btn" onclick="closePopup()">×</button>
+
+            <h2>Welcome Back</h2>
+
+            <p>
+                Login or create your account to continue shopping.
+            </p>
+
+            <div class="auth-actions">
+                <a href="{% url 'login' %}" class="auth-btn no-transition">
+                    Login
+                </a>
+
+                <a href="{% url 'signup' %}" class="auth-btn signup-btn no-transition">
+                    Sign Up
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    {% block body %}{% endblock body %}
+
+    <!-- FOOTER -->
+    <footer class="friday-footer py-5">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Left Column: Brand & Bio -->
+                <div class="col-lg-4 col-md-6">
+                    <h3 class="footer-brand">FRIDAY ORIGINALS</h3>
+                    <p class="footer-bio mt-3">
+                        Crafting minimalist menswear of subtle luxury, durability, and everyday wearability. Fully
+                        designed and hand-finished under our own roof.
+                    </p>
+                    <div class="footer-socials mt-4">
+                        <a href="https://www.instagram.com/friday.originals" target="_blank"><i
+                                class="bi bi-instagram"></i></a>
+                        <a href="https://www.facebook.com/fridayoriginals" target="_blank"><i
+                                class="bi bi-facebook"></i></a>
+                        <a href="https://wa.me/917900010432" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Center Column 1: Navigation Links -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-title">Explore</h6>
+                    <ul class="footer-links list-unstyled mt-3">
+                        <li><a href="{% url 'hii' %}">Home</a></li>
+                        <li><a href="/shop/">Shop</a></li>
+                        <li><a href="/about/">About Us</a></li>
+                        <li><a href="/contact/">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Center Column 2: Customer Care -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-title">Client Services</h6>
+                    <ul class="footer-links list-unstyled mt-3">
+                        <li><a href="/contact/">FAQ & Support</a></li>
+                        <li><a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">Size
+                                Guide</a></li>
+                        <li><a href="/about/#craftsmanship">Craftsmanship</a></li>
+                    </ul>
+                </div>
+
+                <!-- Right Column: Newsletter -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="footer-title">Newsletter</h6>
+                    <p class="footer-newsletter-text mt-3">
+                        Subscribe to receive early access to new collections and brand updates.
+                    </p>
+                    <form class="footer-newsletter-form mt-3"
+                        onsubmit="event.preventDefault(); Swal.fire({title: 'Thank you!', text: 'You have been subscribed to our newsletter.', icon: 'success', background: '#111', color: '#fff'}); this.reset();">
+                        <div class="input-group">
+                            <input type="email" placeholder="YOUR EMAIL ADDRESS"
+                                class="form-control rounded-0 border-0 border-bottom bg-transparent text-white"
+                                required>
+                            <button type="submit"
+                                class="btn p-0 border-0 border-bottom bg-transparent text-white rounded-0"><i
+                                    class="bi bi-arrow-right"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <hr class="footer-divider my-5">
+
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="footer-copy mb-0">© 2026 Friday Originals. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                    <span class="footer-est">ESTD 2006</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- SWEET ALERT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- BOOTSTRAP -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JS -->
+    <script src="{% static 'js/friday.js' %}"></script>
+
+    <!-- SUCCESS POPUP -->
+    {% if messages %}
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        setTimeout(() => {
+
+            {% for message in messages %}
+            Swal.fire({
+                icon: "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% else %}info{% endif %}",
+                title: "{{ message|escapejs }}",
+                background: "#111",
+                color: "#fff",
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
+                backdrop: "rgba(0,0,0,.65)",
+                customClass: {
+                    popup: "friday-popup"
+                }
+            });
+            {% endfor %}
+
+        }, 1400);
+
+    });
+    </script>
+    {% endif %}
+
+    <!-- SIZE GUIDE MODAL -->
+    <div class="modal fade" id="sizeGuideModal" tabindex="-1" aria-labelledby="sizeGuideModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg text-white"
+                style="background: #111111; font-family: 'Inter', sans-serif;">
+                <div class="modal-header border-0 pb-0 px-4 pt-4">
+                    <h5 class="modal-title text-white" id="sizeGuideModalLabel"
+                        style="font-family: 'Cinzel', serif; font-size: 24px; letter-spacing: 1px;">SIZE GUIDE</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 py-4">
+                    <p class="text-secondary mb-4" style="font-size: 14px;">Measurements of Friday Originals menswear
+                        sets. Choose your standard size.</p>
+
+                    <div class="table-responsive">
+                        <table class="table table-dark table-borderless align-middle text-center"
+                            style="--bs-table-bg: #1a1a1a; font-size: 15px; border-radius: 12px; overflow: hidden;">
+                            <thead>
+                                <tr class="border-bottom"
+                                    style="border-color: #2a2a2a !important; font-family: 'Cinzel', serif; font-size: 13px; color: #888;">
+                                    <th scope="col" class="py-3">SIZE</th>
+                                    <th scope="col" class="py-3">CHEST (IN)</th>
+                                    <th scope="col" class="py-3">LENGTH (IN)</th>
+                                    <th scope="col" class="py-3">SHOULDER (IN)</th>
+                                    <th scope="col" class="py-3">SLEEVE (IN)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-bottom" style="border-color: #222 !important;">
+                                    <th scope="row" class="py-3"
+                                        style="font-family: 'Cinzel', serif; font-weight: 700; color: #fff;">M</th>
+                                    <td class="py-3">40"</td>
+                                    <td class="py-3">28"</td>
+                                    <td class="py-3">18"</td>
+                                    <td class="py-3">8.5"</td>
+                                </tr>
+                                <tr class="border-bottom" style="border-color: #222 !important;">
+                                    <th scope="row" class="py-3"
+                                        style="font-family: 'Cinzel', serif; font-weight: 700; color: #fff;">L</th>
+                                    <td class="py-3">42"</td>
+                                    <td class="py-3">29"</td>
+                                    <td class="py-3">19"</td>
+                                    <td class="py-3">9"</td>
+                                </tr>
+                                <tr class="border-bottom" style="border-color: #222 !important;">
+                                    <th scope="row" class="py-3"
+                                        style="font-family: 'Cinzel', serif; font-weight: 700; color: #fff;">XL</th>
+                                    <td class="py-3">44"</td>
+                                    <td class="py-3">30"</td>
+                                    <td class="py-3">20"</td>
+                                    <td class="py-3">9.5"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-4 p-3 rounded-3" style="background: #1a1a1a; font-size: 13px; line-height: 1.6;">
+                        <h6 class="text-white mb-2"
+                            style="font-size: 14px; font-weight: 600; font-family: 'Cinzel', serif;">HOW TO MEASURE</h6>
+                        <ul class="text-secondary mb-0 ps-3">
+                            <li><strong>Chest:</strong> Measure around the fullest part of your chest, keeping the tape
+                                horizontal.</li>
+                            <li><strong>Length:</strong> Measure from the highest point of the shoulder down to the hem.
+                            </li>
+                            <li><strong>Shoulder:</strong> Measure straight across the back from shoulder point to
+                                shoulder point.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

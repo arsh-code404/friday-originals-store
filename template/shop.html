@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+
+<section id="new-arrivals" class="py-5 bg-white">
+  
+  <div class="container text-centre">
+    <h2 class=" text-black text-left py-2 reveal"
+        style="font-family: 'Bebas Neue', sans-serif; font-size:22px;margin-top:-30px;margin-left:-35px">
+      CATALOG
+    </h2>
+
+    <div class="row g-4">
+
+      {% for product in products %}
+      <div class="col-6 col-md-6 col-lg-4 reveal reveal-scale reveal-delay-{% cycle '1' '2' '3' '4' '5' '1' '2' '3' '4' %}">
+        <div class="card bg-white text-black border-0 product-card">
+
+          <!-- DOT SLIDER -->
+          <div id="carousel{{ product.id }}"
+     class="carousel slide product-carousel"
+     data-bs-ride="carousel"
+     data-bs-interval="2500"
+     data-bs-pause="false">
+
+            <!-- DOTS -->
+            <div class="carousel-indicators">
+              <button type="button"
+                      data-bs-target="#carousel{{ product.id }}"
+                      data-bs-slide-to="0"
+                      class="active"></button>
+              <button type="button"
+                      data-bs-target="#carousel{{ product.id }}"
+                      data-bs-slide-to="1"></button>
+            </div>
+
+            <!-- SLIDES -->
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="{{ product.image1.url }}" alt="{{ product.name }}">
+              </div>
+              <div class="carousel-item">
+                <img src="{{ product.image2.url }}" alt="{{ product.name }}">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- DETAILS -->
+          <div class="card-body text-center">
+            <h6 class="mb-1">{{ product.name }}</h6>
+            <p class="opacity-75">₹ {% widthratio product.price 3 1 %}</p>
+            <a href="{% url 'product' product.pk %}"
+   class="btn btn-sm view-btn">
+  View Product
+</a>
+
+          </div>
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+
+
+
+</section>
+
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ===============================
+   FRIDAY ORIGINALS PREMIUM CATALOG
+=============================== */
+
+#new-arrivals{
+  background: linear-gradient(180deg,#fafafa 0%,#ffffff 100%);
+  padding: 22px 0 48px !important;
+}
+
+#new-arrivals h2{
+  font-family:'Cinzel',serif !important;
+  font-size:20px !important;
+  letter-spacing:4px;
+  font-weight:600;
+  margin:0 auto 26px !important;
+  text-align:center !important;
+  color:#111;
+}
+
+/* CARD */
+.product-card{
+  background:transparent !important;
+  border:none !important;
+  border-radius:30px;
+  overflow:visible;
+  transition:transform .35s cubic-bezier(.19,1,.22,1);
+}
+
+.product-card:hover{
+  transform:translateY(-8px);
+}
+
+/* IMAGE */
+.product-carousel{
+  width:100%;
+  border-radius:30px;
+  overflow:hidden;
+  background:#fff;
+  position:relative;
+  box-shadow:
+    0 16px 42px rgba(0,0,0,.08),
+    0 1px 0 rgba(255,255,255,.9) inset;
+}
+
+.product-carousel .carousel-inner{
+  border-radius:30px;
+  overflow:hidden;
+}
+
+.product-carousel .carousel-item{
+  height:500px;
+  background:#f7f7f7;
+}
+
+.product-carousel img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+  transition:
+    transform .55s cubic-bezier(.19,1,.22,1),
+    filter .35s ease;
+}
+
+.product-card:hover .product-carousel img{
+  transform:scale(1.04);
+  filter:brightness(1.02);
+}
+
+/* DOTS EXACTLY BELOW IMAGE */
+.product-carousel .carousel-indicators{
+  position:absolute !important;
+  bottom:14px;
+  left:50%;
+  transform:translateX(-50%);
+  margin:0 !important;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  z-index:20;
+}
+
+.product-carousel .carousel-indicators button{
+  width:7px;
+  height:7px;
+  border:none;
+  border-radius:50%;
+  margin:0;
+  opacity:1;
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(6px);
+  transition:all .28s ease;
+}
+
+.product-carousel .carousel-indicators .active{
+  width:22px;
+  border-radius:999px;
+  background:#fff;
+}
+
+/* BODY */
+.card-body{
+  padding:18px 8px 12px;
+  text-align:center;
+}
+
+.card-body h6{
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px;
+  font-weight:600;
+  margin-bottom:4px !important;
+  letter-spacing:.2px;
+  color:#111;
+}
+
+.card-body p{
+  font-family:'Inter',sans-serif;
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:.7px;
+  opacity:.72;
+  margin-bottom:16px;
+  color:#111;
+}
+
+/* BUTTON */
+.view-btn{
+  border:none;
+  border-radius:999px;
+  background:#000;
+  color:#fff !important;
+  padding:11px 26px;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  box-shadow:0 8px 18px rgba(0,0,0,.08);
+  transition:all .25s ease;
+}
+
+.view-btn:hover{
+  transform:translateY(-2px);
+  background:#1d1d1d;
+  color:#fff !important;
+  box-shadow:0 12px 24px rgba(0,0,0,.14);
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+  #new-arrivals{
+    padding:18px 0 36px !important;
+  }
+
+  .row.g-4{
+    --bs-gutter-x:14px;
+    --bs-gutter-y:26px;
+  }
+
+  .product-card{
+    border-radius:22px;
+  }
+
+  .product-carousel{
+    border-radius:22px;
+  }
+
+  .product-carousel .carousel-inner{
+    border-radius:22px;
+  }
+
+  .product-carousel .carousel-item{
+    height:250px;
+  }
+
+  .product-carousel .carousel-indicators{
+    bottom:10px;
+    gap:6px;
+  }
+
+  .product-carousel .carousel-indicators button{
+    width:6px;
+    height:6px;
+  }
+
+  .product-carousel .carousel-indicators .active{
+    width:18px;
+  }
+
+  .card-body{
+    padding:14px 6px 8px;
+  }
+
+  .card-body h6{
+    font-size:18px;
+  }
+
+  .card-body p{
+    font-size:11px;
+    margin-bottom:12px;
+  }
+
+  .view-btn{
+    padding:9px 16px;
+    font-size:8px;
+    letter-spacing:1.4px;
+  }
+
+  #new-arrivals h2{
+    font-size:17px !important;
+    letter-spacing:3px;
+  }
+}
+
+/* TABLET */
+@media (min-width:769px) and (max-width:1024px){
+
+  .product-carousel .carousel-item{
+    height:360px;
+  }
+
+  .card-body h6{
+    font-size:22px;
+  }
+}
+</style>
+
+
+{% endblock body %}

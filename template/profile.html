@@ -1,0 +1,450 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Profile{% endblock %}
+
+{% block body %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #050505 0%, #111111 50%, #1a1a1a 100%);
+    overflow: hidden;
+}
+
+.profile-wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    animation: fadeUp 0.8s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-card {
+    width: min(1280px, 100%);
+    height: 88vh;
+    max-height: 720px;
+    background: linear-gradient(145deg, #ffffff, #f7f7f7);
+    border-radius: 28px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    box-shadow: 0 24px 70px rgba(0,0,0,0.42);
+}
+
+.left-panel {
+    background:
+        linear-gradient(rgba(0,0,0,0.58), rgba(0,0,0,0.82)),
+        url("{% static 'image/pfp.jpg' %}") center center/cover no-repeat;
+    padding: 22px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.brand {
+    font-size: 13px;
+    letter-spacing: 7px;
+    font-weight: 500;
+}
+
+.brand-box {
+    position: absolute;
+    top: 13px;
+    left: 20px;
+}
+.brand-line {
+    width: 68px;
+    height: 2px;
+    background: white;
+    margin-top: 14px;
+    border-radius: 999px;
+}
+
+.avatar-wrap {
+    text-align: center;
+}
+
+.avatar {
+    width: 115px;
+    height: 115px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255,255,255,0.95);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    transition: 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.05);
+}
+
+.user-name {
+    margin-top: 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.user-sub {
+    margin-top: 6px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+}
+
+.right-panel {
+    padding: 22px 28px;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.top-row span {
+    font-size: 13px;
+    color: #222;
+    font-weight: 500;
+}
+
+.crown {
+    width: 36px;
+    height: 36px;
+    background: #000;
+    color: white;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: 0.3s ease;
+}
+
+.crown:hover {
+    transform: translateY(-2px);
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: #111;
+    line-height: 1;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-top: 6px;
+    margin-bottom: 18px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: center;
+    background: rgba(245,245,245,0.96);
+    padding: 14px 18px;
+    border-radius: 14px;
+    transition: 0.25s ease;
+}
+
+.info-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+}
+
+.info-row input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 500;
+    color: #222;
+    outline: none;
+}
+
+.readonly input {
+    pointer-events: none;
+    color: #555;
+}
+
+.locked input {
+    pointer-events: none !important;
+    color: #555 !important;
+}
+
+.button-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    border: none;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #000, #171717);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+}
+.btn-secondary {
+    background: #ffffff;
+    border: 2px solid #5c5c5c;
+    color: #040404 !important;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.28s ease;
+}
+
+.btn-secondary:hover {
+    background: #111111;
+    color: #ffffff !important;
+    border-color: #111111;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+}
+
+
+.secure {
+    text-align: center;
+    font-size: 10px;
+    color: #777;
+    margin-top: 8px;
+}
+
+@media (max-width: 991px) {
+    html, body {
+        overflow-y: auto;
+    }
+
+    .profile-wrapper {
+        height: auto;
+        min-height: 100vh;
+        padding: 14px;
+    }
+
+    .profile-card {
+        height: auto;
+        max-height: none;
+        grid-template-columns: 1fr;
+    }
+
+    .left-panel {
+        gap: 18px;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .user-name {
+        font-size: 26px;
+    }
+
+    .right-panel {
+        padding: 18px 14px;
+    }
+
+    .top-row {
+        justify-content: center;
+    }
+
+    .heading {
+        font-size: 34px;
+        text-align: center;
+    }
+
+    .subtitle {
+        text-align: center;
+    }
+
+    .info-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .info-row input {
+        text-align: left;
+    }
+
+    .button-row {
+        flex-direction: column;
+    }
+}
+</style>
+
+<div class="profile-wrapper reveal reveal-scale">
+    <div class="profile-card">
+
+        <div class="left-panel">
+            <div class="brand-box">
+    <div class="brand">FRIDAY ORIGINALS</div>
+    <div class="brand-line"></div>
+</div>
+
+            <div class="avatar-wrap">
+                <img src="{% static 'image/pfp.jpg' %}" class="avatar" alt="Profile">
+                <div class="user-name">{{ request.user.get_full_name|default:request.user.first_name }}</div>
+                <div class="user-sub">Welcome back</div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+
+            <div class="top-row">
+                <span>Crafted for Men Who Lead</span>
+                <div class="crown">♛</div>
+            </div>
+
+            <div class="main-content">
+                <div class="heading">Your Profile</div>
+                <div class="subtitle">Manage your account details</div>
+
+                <form method="POST" id="profileForm">
+                    {% csrf_token %}
+
+                    <div class="info-row readonly">
+    <div class="label">Full Name</div>
+    <input
+        type="text"
+        name="full_name"
+        value="{{ request.user.get_full_name }}"
+        readonly
+    >
+</div>
+
+                    <div class="info-row readonly">
+                        <div class="label">Email Address</div>
+                        <input type="email" name="email" value="{{ request.user.email }}" readonly>
+                    </div>
+
+                    <div class="info-row readonly">
+                        <div class="label">Phone Number</div>
+                        <input type="text" name="phone" value="{{ profile.phone }}" readonly>
+                    </div>
+
+                    <div class="info-row locked">
+                        <div class="label">Joined On</div>
+                        <input type="text" value="{{ request.user.date_joined|date:'d M Y' }}" readonly>
+                    </div>
+
+                    <div class="button-row">
+                        <button type="button" id="editBtn" class="btn btn-primary">
+                            EDIT PROFILE
+                        </button>
+
+                        <a href="{% url 'logout' %}" class="btn btn-secondary">
+                            LOGOUT
+                        </a>
+                    </div>
+
+                    <div class="secure">
+                        🔒 Your information is secure
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const editBtn = document.getElementById("editBtn");
+    const form = document.getElementById("profileForm");
+
+    let editing = false;
+
+    editBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        if (!editing) {
+            document.querySelectorAll(".readonly").forEach(row => {
+                row.classList.remove("readonly");
+
+                const input = row.querySelector("input");
+                if (input) {
+                    input.removeAttribute("readonly");
+                    input.style.pointerEvents = "auto";
+                    input.style.color = "#111";
+                    input.style.cursor = "text";
+                }
+            });
+
+            editBtn.textContent = "SAVE CHANGES";
+            editing = true;
+        } else {
+            form.submit();
+        }
+    });
+});
+</script>
+
+{% endblock %}

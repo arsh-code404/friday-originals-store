@@ -1,0 +1,479 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friday Originals | Login</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+html, body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    min-height:113vh;
+    background:url("{% static 'image/pflg.jpg' %}") center center / cover no-repeat;
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* PREMIUM OVERLAY */
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(to bottom, rgba(0,0,0,.02), rgba(0,0,0,.07));
+    pointer-events:none;
+    z-index:0;
+}
+
+
+/* DESKTOP LOGIN TAG */
+
+.page-wrapper{
+    min-height:100vh;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin-top:150px;
+    align-items:center;
+    position:relative;
+    z-index:2;
+    
+}
+.login-form{
+    width:360px;
+    max-width:360px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px 24px;
+    z-index:2;
+    margin:0 auto;
+}
+/* BRAND */
+.brand{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:2.8px;
+    color:#111;
+    white-space:nowrap;
+    text-align:center;
+    margin-bottom:16px;
+    transition:.28s ease;
+}
+
+.brand:hover{
+    letter-spacing:3.4px;
+}
+
+/* HEADING */
+.login-form h1{
+    font-size:26px;
+    font-weight:800;
+    color:#111;
+    text-align:center;
+    margin-bottom:10px;
+    line-height:1.1;
+}
+
+.login-form p{
+    font-size:12px;
+    color:#4b4b4b;
+    text-align:center;
+    line-height:1.5;
+    margin-bottom:20px;
+    font-weight:500;
+}
+
+/* FORM */
+.login-form form{
+    width:100%;
+}
+
+/* INPUTS */
+.input-group{
+    width:100%;
+    position:relative;
+    margin-bottom:15px;
+}
+
+.input-group input{
+    width:100%;
+    border:none;
+    border-bottom:1.5px solid rgba(0,0,0,.25);
+    background:transparent;
+    padding:11px 0;
+    font-size:13px;
+    outline:none;
+    color:#111;
+    transition:.28s ease;
+}
+
+.input-group input:focus{
+    border-bottom-color:#000;
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+}
+
+.input-group input::placeholder{
+    color:#5d5d5d;
+    font-size:12px;
+}
+
+.login-form{
+    transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
+}
+
+.login-form:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 30px 80px rgba(0,0,0,.08);
+}
+
+.password-toggle{
+    position:absolute;
+    right:0;
+    top:13px;
+    cursor:pointer;
+    color:#111;
+    font-size:13px;
+    transition:.25s ease;
+}
+
+.password-toggle:hover{
+    transform:scale(1.08);
+}
+
+/* OPTIONS */
+.options{
+    width:100%;
+    font-size:10px;
+    margin-bottom:16px;
+    color:#111;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.options label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    font-weight:500;
+}
+
+.options input[type="checkbox"]{
+    accent-color:#111;
+    transform:scale(.95);
+}
+
+.options a{
+    text-decoration:none;
+    color:#111;
+    font-weight:600;
+    transition:.25s ease;
+}
+
+.options a:hover{
+    opacity:.72;
+}
+
+/* BUTTONS */
+.login-btn{
+    width:100%;
+    height:44px;
+    border:none;
+    border-radius:999px;
+    background:linear-gradient(135deg,#111,#000);
+    color:#fff;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    margin-bottom:12px;
+    transition:.28s ease;
+    box-shadow:0 10px 18px rgba(0,0,0,.12);
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 24px rgba(0,0,0,.18);
+}
+
+.google-btn{
+    width:100%;
+    height:42px;
+    border:none;
+    border-radius:999px;
+    background:rgba(255,255,255,.95);
+    color:#111;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 8px 16px rgba(0,0,0,.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    text-decoration:none;
+    transition:.28s ease;
+    backdrop-filter:blur(8px);
+}
+
+.google-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 22px rgba(0,0,0,.12);
+}
+
+.google-btn i{
+    font-size:14px;
+}
+
+/* SIGNUP */
+.signup-link{
+    margin-top:14px;
+    font-size:10px;
+    color:#111;
+    text-align:center;
+    font-weight:500;
+}
+
+.signup-link a{
+    text-decoration:none;
+    color:#111;
+    font-weight:800;
+    transition:.25s ease;
+}
+
+.signup-link a:hover{
+    opacity:.75;
+}
+
+/* LARGE TABLET */
+@media (max-width: 1200px){
+    body{
+        background-size:115% auto;
+    }
+
+    .login-form{
+        width:24%;
+        min-width:290px;
+        top:25%;
+    }
+}
+
+/* TABLET */
+@media (max-width: 992px){
+    html,body{
+        overflow-y:auto;
+    }
+
+    body{
+        background-size:cover;
+        background-position:center center;
+    }
+
+    .page-wrapper{
+        align-items:flex-start;
+        padding:85px 20px 60px;
+        margin-top:100px;
+    }
+
+    .login-form{
+        max-width:320px;
+        width:100%;
+        margin:0 auto;
+        padding:28px 24px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 768px){
+    body{
+        background-size:180% auto;
+        background-position:center top;
+    }
+
+    .login-form{
+        width:min(92vw, 310px);
+        margin:95px auto 40px auto;
+        padding:24px 20px;
+    }
+
+    .brand{
+        font-size:12px;
+        letter-spacing:2.2px;
+    }
+
+    .login-form h1{
+        font-size:28px;
+    }
+
+    .login-form p{
+        font-size:13px;
+    }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 768px){
+    body{
+        background-size:cover;
+        background-position:center center;
+    }
+
+    .page-wrapper{
+        padding:30px 16px 40px;
+    }
+
+    .login-form{
+        width:100%;
+        max-width:310px;
+        padding:22px 18px;
+    }
+}
+
+.auth-error{
+    width: 100%;
+    margin-bottom: 22px;
+    padding: 14px 18px;
+    border-radius: 18px;
+
+    background: rgba(220, 38, 38, 0.08);
+    border: 1px solid rgba(220, 38, 38, 0.20);
+
+    color: #d62828;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    text-align: left;
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 10px 30px rgba(220, 38, 38, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.35);
+
+    transform-origin: top center;
+    animation: premiumErrorReveal .55s cubic-bezier(.22,1,.36,1);
+}
+
+@keyframes premiumErrorReveal{
+    0%{
+        opacity: 0;
+        transform: translateY(-18px) scale(.96);
+        filter: blur(6px);
+    }
+
+    55%{
+        opacity: 1;
+        transform: translateY(4px) scale(1.01);
+        filter: blur(0);
+    }
+
+    100%{
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@media (max-width: 768px){
+    .auth-error{
+        padding: 12px 14px;
+        font-size: 13px;
+        border-radius: 14px;
+        margin-bottom: 16px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="login-form">
+
+    <div class="brand">FRIDAY ORIGINALS</div>
+
+    <h1>Welcome Back</h1>
+    <p>Login to continue your premium shopping experience</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'error' in message.tags %}
+                <div class="auth-error">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+        <div class="input-group">
+            <input type="email" name="email" placeholder="Username / Email" required>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <i class="fa-solid fa-eye password-toggle" id="togglePassword"></i>
+        </div>
+
+        <div class="options">
+            <label>
+                <input type="checkbox">
+                Remember me
+            </label>
+            <div class="forgot-wrap">
+    <a href="{% url 'forgot_password' %}" class="forgot-link">
+        Forgot Password?
+    </a>
+</div>
+        </div>
+
+        <button type="submit" class="login-btn">Log In</button>
+
+        <a href="{% provider_login_url 'google' %}" class="google-btn">
+            <i class="fa-brands fa-google"></i>
+            Continue with Google
+        </a>
+
+        <div class="signup-link">
+            Don’t have an account?
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </div>
+
+    </form>
+</div>
+</div>
+
+<script>
+document.getElementById("togglePassword").addEventListener("click", function(){
+    const password = document.getElementById("password");
+
+    if(password.type === "password"){
+        password.type = "text";
+        this.classList.replace("fa-eye","fa-eye-slash");
+    } else {
+        password.type = "password";
+        this.classList.replace("fa-eye-slash","fa-eye");
+    }
+});
+</script>
+
+</body>
+</html>

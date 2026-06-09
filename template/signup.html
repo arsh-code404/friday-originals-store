@@ -1,0 +1,427 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@300;400;500;600&display=swap');
+
+html, body{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-height:100%;
+    background:#000;
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+}
+
+/* FULL PAGE CENTER */
+.signup-wrapper{
+    min-height:100vh;
+    width:100%;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px 20px;
+}
+
+/* FLOATING CARD */
+.signup-card{
+    width:100%;
+    max-width:1180px;
+    min-height:720px;
+    display:grid;
+    grid-template-columns: 48% 52%;
+    background:#080808;
+    border-radius:34px;
+    overflow:hidden;
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.75),
+        inset 0 0 0 1px rgba(255,255,255,.06);
+    transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease;
+}
+
+.signup-card:hover{
+    transform: translateY(-4px);
+    box-shadow:
+        0 40px 120px rgba(0,0,0,.85),
+        inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+/* IMAGE SIDE */
+.left-panel{
+    position:relative;
+    min-height:720px;
+    overflow:hidden;
+}
+
+.left-panel img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center center;
+    display:block;
+    filter:brightness(.82);
+}
+
+/* DARK OVERLAY */
+.left-panel::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.08),
+        rgba(0,0,0,.45)
+    );
+}
+
+/* HERO TEXT */
+.hero-content{
+    position:absolute;
+    top:40px;
+    left:40px;
+    z-index:2;
+    max-width:320px;
+    color:#fff;
+}
+
+.hero-brand{
+    font-size:13px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    opacity:.85;
+    margin-bottom:18px;
+}
+
+.hero-line{
+    width:42px;
+    height:2px;
+    background:#d9c9ad;
+    margin-bottom:20px;
+}
+
+.hero-content h1{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(3rem,4vw,5rem);
+    line-height:0.95;
+    margin:0;
+}
+
+.hero-content p{
+    margin-top:20px;
+    font-size:14px;
+    line-height:1.7;
+    color:rgba(255,255,255,.75);
+}
+
+/* FORM SIDE */
+.right-panel{
+    background:#080808;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:55px;
+}
+
+.form-box{
+    width:100%;
+    max-width:470px;
+}
+
+.form-box h2{
+    color:#fff;
+    font-size:42px;
+    font-weight:500;
+    margin:0 0 10px;
+}
+
+.subtitle{
+    color:rgba(255,255,255,.55);
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:28px;
+}
+
+/* DJANGO MSGS */
+.alert{
+    padding:14px;
+    border-radius:14px;
+    margin-bottom:16px;
+    font-size:14px;
+}
+
+.alert-error{
+    background:#2b1010;
+    color:#ffc3c3;
+}
+
+.alert-success{
+    background:#112316;
+    color:#bdf8ca;
+}
+
+/* FORM */
+.two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
+.form-group label{
+    display:block;
+    color:#ddd;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.form-group input{
+    width:100%;
+    height:56px;
+    background:#101010;
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:14px;
+    padding:0 18px;
+    color:#fff;
+    font-size:14px;
+    transition:.3s ease;
+}
+
+.form-group input:focus{
+    outline:none;
+    border-color:#d9c9ad;
+    box-shadow:0 0 0 4px rgba(217,201,173,.08);
+}
+
+.helper{
+    font-size:11px;
+    color:rgba(255,255,255,.45);
+    margin-top:8px;
+}
+
+/* BUTTON */
+.signup-btn{
+    width:100%;
+    height:56px;
+    border:none;
+    border-radius:14px;
+    background:#dfd0b5;
+    color:#000;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:2px;
+    cursor:pointer;
+    transition:.3s ease;
+    margin-top:8px;
+}
+
+.signup-btn:hover{
+    transform:translateY(-2px);
+    background:#f4e8d0;
+}
+
+.login-link{
+    text-align:center;
+    margin-top:24px;
+    color:rgba(255,255,255,.45);
+    font-size:14px;
+}
+
+.login-link a{
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* TABLET */
+@media(max-width:1024px){
+    .signup-card{
+        grid-template-columns:1fr;
+        max-width:720px;
+    }
+
+    .left-panel{
+        min-height:420px;
+    }
+
+    .right-panel{
+        padding:35px;
+    }
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .signup-wrapper{
+        padding:14px;
+    }
+
+    .signup-card{
+        border-radius:26px;
+    }
+
+    .left-panel{
+        min-height:320px;
+    }
+
+    .hero-content{
+        top:24px;
+        left:22px;
+        max-width:240px;
+    }
+
+    .hero-content h1{
+        font-size:2.5rem;
+    }
+
+    .hero-content p{
+        font-size:12px;
+    }
+
+    .right-panel{
+        padding:24px 18px;
+    }
+
+    .form-box h2{
+        font-size:30px;
+    }
+
+    .two-col{
+        grid-template-columns:1fr;
+        gap:0;
+    }
+
+    .form-group input{
+        height:52px;
+    }
+}
+</style>
+
+<div class="signup-wrapper">
+    <div class="signup-card reveal reveal-scale">
+
+        <!-- LEFT IMAGE -->
+        <div class="left-panel">
+            <img src="{% static 'image/signup.png' %}" alt="Friday Originals">
+
+            <div class="hero-content">
+                <div class="hero-brand">FRIDAY ORIGINALS</div>
+                <div class="hero-line"></div>
+
+                <h1>Crafted for<br>Men Who Lead</h1>
+
+                <p>
+                    Timeless essentials. Premium quality.
+                    Designed for those who define the future.
+                </p>
+            </div>
+        </div>
+
+        <!-- RIGHT FORM -->
+        <div class="right-panel">
+            <div class="form-box">
+
+                <h2>Create Account</h2>
+
+                <p class="subtitle">
+                    Join Friday Originals and experience premium menswear.
+                </p>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST" >
+    {% csrf_token %}
+
+    <div class="two-col">
+        <div class="form-group">
+            <label>First Name *</label>
+            <input
+                type="text"
+                name="first_name"
+                value="{{ form_data.first_name|default:'' }}"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Middle Name</label>
+            <input
+                type="text"
+                name="middle_name"
+                value="{{ form_data.middle_name|default:'' }}"
+            >
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Phone Number *</label>
+        <input
+            type="tel"
+            name="phone"
+            value="{{ form_data.phone|default:'' }}"
+            pattern="[0-9]{10}"
+            maxlength="10"
+            required
+        >
+        <div class="helper">Enter valid 10 digit phone number.</div>
+    </div>
+
+    <div class="form-group">
+        <label>Email Address *</label>
+        <input
+            type="email"
+            name="email"
+            value="{{ form_data.email|default:'' }}"
+            required
+        >
+    </div>
+
+    <div class="two-col">
+        <div class="form-group">
+            <label>Password *</label>
+            <input
+                type="password"
+                name="password"
+                minlength="8"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Confirm Password *</label>
+            <input
+                type="password"
+                name="confirm_password"
+                minlength="8"
+                required
+            >
+        </div>
+    </div>
+
+    <button type="submit" class="signup-btn">
+        CREATE ACCOUNT
+    </button>
+</form>
+
+                <div class="login-link">
+                    Already have an account?
+                    <a href="{% url 'login' %}">Sign in</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

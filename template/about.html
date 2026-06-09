@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+{%load static%}
+{% block body %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;600&display=swap');
+
+  body {
+    margin: 0;
+  }
+
+  /* ========== TOP WHITE SECTION ========== */
+  .top-section {
+    position: relative;
+    background: #ffffff;
+    top: 0;
+    z-index: 999;
+    padding: 35px 50px 10px;
+    position: relative
+  }
+
+
+
+  /* ZARA TITLE */
+  .zara-title {
+    font-family: "Playfair Display", serif;
+    font-size: 260px;
+    font-weight: 600;
+    padding-bottom: 40px;
+
+      {
+      % comment %
+    }
+
+    letter-spacing: -10px;
+
+      {
+      % endcomment %
+    }
+
+    line-height: 0.85;
+    color: #000000;
+    text-align: center;
+    z-index:1;
+
+  }
+
+  /* ========== BOTTOM BLUE SECTION ========== */
+  .bottom-section {
+    position: relative;
+    background: #000000;
+    padding: 10px 50px 0px;
+    min-height: 600px;
+    color: #ffffff;
+  }
+
+  /* LEFT CONTENT */
+  .left-content {
+    width: 45%;
+    padding-right: 80px;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    line-height: 2.0;
+  }
+
+  /* COLOR CHIPS */
+  .chips {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .chip {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+  }
+
+  .yellow {
+    background: #51514f;
+  }
+
+  .white {
+    background: #ffffff;
+  }
+
+  .blue {
+    background: #000000;
+    border: 1px solid #fff;
+  }
+
+  .grey-bg {
+    background-color: #2e2e2e !important;
+    color: #ffffff !important;
+    padding: 16px 20px;
+    display: block;
+    max-width: 520px;
+  }
+
+  /* BARCODE */
+  .barcode-wrap {
+    margin-top: 40px;
+  }
+
+  .barcode {
+    width: 140px;
+    height: 48px;
+    background: repeating-linear-gradient(to right,
+        #ffffff,
+        #ffffff 2px,
+        #0b2f6b 2px,
+        #0b2f6b 4px);
+  }
+
+  .barcode-num {
+    font-size: 11px;
+    margin-top: 6px;
+  }
+
+  /* RIGHT STORY */
+  .story-wrapper {
+    position: absolute;
+    right: 20px;
+    top: 1%;
+    transform: translateY(-50%);
+    text-align: center;
+    line-height: 1.2;
+    padding-top: 0;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  /* VERTICAL TEXT */
+  .story-vertical {
+    writing-mode: vertical-rl;
+    font-family: Inter, sans-serif;
+    font-size: 84px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    text-orientation: mixed;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  /* STUDIO */
+  .story-studio {
+    font-family: "Playfair Display", serif;
+    font-size: 52px;
+    margin-top: 20px;
+  }
+
+  /* FOOTER TAG */
+  .footer-box {
+    position: absolute;
+    right: 20px;
+    bottom: 40px;
+    border: 1px solid #ffffff;
+    padding: 8px 16px;
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .copyright-bar {
+    width: 100%;
+    text-align: center;
+    padding: 20px 10px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    background: #000;
+    opacity: 0.85;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* CENTER LOOP VIDEO */
+  .video-center {
+    position: absolute;
+    left: 50%;
+    top: 2%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    height: 520px;
+    overflow: hidden;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 24px;
+  }
+
+  .video-center video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: contrast(1.05) brightness(0.9);
+    border-radius: 24px;
+  }
+
+  /* ================= TABLET ================= */
+  @media screen and (max-width: 1024px) {
+
+    .top-section {
+      padding: 20px 20px 10px;
+      overflow: hidden;
+    }
+
+    .zara-title {
+      font-size: clamp(80px, 18vw, 140px);
+      line-height: 0.9;
+      text-align: center;
+    }
+
+    .bottom-section {
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      min-height: auto;
+      position: relative;
+    }
+
+    .left-content {
+      width: 100%;
+      padding-right: 0;
+      font-size: 15px;
+      line-height: 1.8;
+      order: 1;
+    }
+
+    .video-center {
+      position: relative;
+      left: auto;
+      top: auto;
+      transform: none;
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      margin: 30px auto;
+      order: 2;
+      pointer-events: auto;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .video-center video {
+      width: 100%;
+      height: auto;
+      max-height: 450px;
+      display: block;
+      object-fit: cover;
+      border-radius: 24px;
+    }
+
+    .story-wrapper {
+      position: relative;
+      right: auto;
+      top: auto;
+      transform: none;
+      text-align: center;
+      margin: 25px 0;
+      order: 3;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .story-vertical {
+      writing-mode: horizontal-tb !important;
+      font-size: clamp(32px, 6vw, 48px);
+      letter-spacing: 4px;
+      text-align: center;
+    }
+
+    .grey-bg {
+      max-width: 100%;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .footer-box {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      margin: 20px auto 0;
+      display: inline-block;
+      order: 4;
+    }
+  }
+
+
+  /* ================= MOBILE ================= */
+  @media screen and (max-width: 768px) {
+
+    html,
+    body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
+    * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    .top-section {
+      padding: 15px 15px 10px;
+    }
+
+    .zara-title {
+      font-size: clamp(48px, 18vw, 90px);
+      line-height: 0.9;
+      padding-bottom: 20px;
+    }
+
+    .bottom-section {
+      padding: 30px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .left-content {
+      font-size: 14px;
+      line-height: 1.7;
+      width: 100%;
+      order: 1;
+    }
+
+    .chips {
+      justify-content: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      width: 24px;
+      height: 24px;
+    }
+
+    .grey-bg {
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .video-center {
+      position: relative;
+      left: auto;
+      top: auto;
+      transform: none;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+      order: 2;
+    }
+
+    .video-center video {
+      width: 100%;
+      height: auto;
+    }
+
+    .story-wrapper {
+      position: relative;
+      right: auto;
+      top: auto;
+      transform: none;
+      text-align: center;
+      margin: 20px 0 10px;
+      order: 3;
+      width: 100%;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .story-vertical {
+      writing-mode: horizontal-tb !important;
+      font-size: clamp(16px, 5vw, 24px) !important;
+      letter-spacing: 2px !important;
+      text-align: center !important;
+      line-height: 1.3;
+    }
+
+    .barcode-wrap {
+      margin-top: 20px;
+      order: 4;
+    }
+
+    .barcode {
+      width: 80px;
+      height: 30px;
+    }
+
+    .footer-box {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      font-size: 10px;
+      padding: 5px 10px;
+      margin: 15px auto 0;
+      order: 5;
+    }
+
+    .copyright-bar {
+      font-size: 11px;
+      padding: 15px 10px;
+      order: 6;
+    }
+  }
+</style>
+
+<!-- ===== TOP WHITE ===== -->
+<section class="top-section">
+
+  <div class="zara-title reveal">ABOUT</div>
+</section>
+
+<!-- ===== BOTTOM BLUE ===== -->
+<section class="bottom-section">
+
+  <div class="left-content reveal reveal-delay-2">
+    Designed for individuals who value subtle luxury, durability, and
+    everyday wearability.
+    <div class="chips">
+      <div class="chip yellow"></div>
+      <div class="chip white"></div>
+      <div class="chip blue"></div>
+    </div>
+
+    <p class="grey-bg" id="craftsmanship">
+      Built on precision, simplicity, and purpose, our journey is rooted in
+      craftsmanship and culture. Each piece reflects confidence, restraint,
+      and a modern identity.
+    </p>
+    <hr style="border: none; border-top: 1px solid #555; margin: 20px 0; width: 100%;">
+    We present our collections in thoughtfully assembled sets of three, available in sizes M, L, and XL, with every
+    stage of creation executed under our own roof. From the first cut of fabric to the final hand-finished detail, our
+    process is defined by skilled craftsmanship and disciplined precision. This complete control allows us to deliver
+    apparel that embodies authenticity, resilience, and a refined identity rooted in culture and craft.
+
+
+    <div class="barcode-wrap">
+      <div class="barcode"></div>
+      <div class="barcode-num">estd 2006</div>
+    </div>
+  </div>
+
+  <!-- MIDDLE VIDEO SECTION -->
+  <div class="video-center reveal reveal-delay-4">
+    <video autoplay muted loop playsinline>
+      <source src="{% static 'videos/brand.mp4' %}" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="story-wrapper reveal-scale reveal-delay-5">
+    <div class="story-vertical">FRIDAY</div>
+    <div class="story-vertical">ORIGINALS</div>
+  </div>
+
+  <div class="footer-box">FO STUDIO</div>
+
+
+</section>
+
+
+{% endblock body %}

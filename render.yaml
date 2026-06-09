@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: friday
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn friday.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: DATABASE_PATH
+        value: /opt/render/project/src/db.sqlite3

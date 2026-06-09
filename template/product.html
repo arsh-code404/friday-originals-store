@@ -1,0 +1,785 @@
+{% extends "base.html" %}
+{% block body %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap');
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  background:#ffffff;
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+}
+
+/* PAGE */
+.product-page{
+  max-width:1380px;
+  margin:38px auto 80px;
+  padding:0 28px;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:72px;
+  align-items:start;
+  animation:fadeLuxury .7s cubic-bezier(.22,1,.36,1);
+}
+
+@keyframes fadeLuxury{
+  from{
+    opacity:0;
+    transform:translateY(40px);
+    filter:blur(8px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+    filter:blur(0);
+  }
+}
+
+/* LEFT */
+.product-image{
+  width:100%;
+  position:sticky;
+  top:120px;
+}
+
+.slider{
+  position:relative;
+  width:100%;
+  height:780px;
+  background:#f7f7f7;
+  overflow:hidden;
+  border-radius:28px;
+}
+
+.slide{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transform:translateX(100%);
+  transition:transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  border-radius:28px;
+  box-shadow:
+    0 22px 65px rgba(0,0,0,.08),
+    0 8px 22px rgba(0,0,0,.05);
+  pointer-events:none;
+  z-index:1;
+}
+
+.slide.active{
+  opacity:1;
+  transform:translateX(0);
+  pointer-events:auto;
+  z-index:2;
+}
+
+.slide.slide-out-left{
+  opacity:0;
+  transform:translateX(-100%);
+  z-index:1;
+}
+
+.slide.slide-out-right{
+  opacity:0;
+  transform:translateX(100%);
+  z-index:1;
+}
+
+.slide.slide-from-left{
+  transform:translateX(-100%) !important;
+  transition:none !important;
+}
+
+/* IMAGE ZOOM LENS (desktop only) */
+.zoom-wrap{
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+  cursor:crosshair;
+}
+
+.zoom-wrap img{
+  transition: transform .4s cubic-bezier(.22,1,.36,1);
+  will-change: transform;
+}
+
+.zoom-wrap:hover img{
+  transform: scale(1.35);
+}
+
+@media (max-width:768px){
+  .zoom-wrap:hover img{
+    transform: none;
+  }
+  .zoom-wrap{
+    cursor: default;
+  }
+}
+
+.slide.active{
+  opacity:1;
+  visibility:visible;
+}
+
+/* ARROWS */
+.arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:54px;
+  height:54px;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(10px);
+  color:#111;
+  font-size:30px;
+  cursor:pointer;
+  z-index:50;
+  transition:all .35s ease;
+  box-shadow:none;
+  opacity:.75;
+}
+
+.arrow:hover{
+  background:rgba(17,17,17,.92);
+  color:#fff;
+  transform:translateY(-50%) scale(1.08);
+  opacity:1;
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+
+.prev{ left:22px; }
+.next{ right:22px; }
+
+
+
+/* DOTS */
+.slider-dots{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:20px;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border:none;
+  border-radius:50%;
+  background:rgba(0,0,0,.15);
+  cursor:pointer;
+  transition:all .3s ease;
+  margin:0 4px;
+}
+
+.dot.active{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#111;
+  transform:scale(1.35);
+  box-shadow:0 0 6px rgba(0,0,0,0.15);
+}
+
+/* RIGHT */
+.product-info{
+  padding-top:18px;
+  animation:slideInfo .8s ease;
+}
+
+@keyframes slideInfo{
+  from{
+    opacity:0;
+    transform:translateX(35px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+.product-tag{
+  display:inline-block;
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:#777;
+  margin-bottom:18px;
+}
+
+.product-info h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:64px;
+  font-weight:600;
+  line-height:1.05;
+  margin-bottom:18px;
+  color:#111;
+}
+
+.price{
+  font-size:30px;
+  font-weight:600;
+  margin-bottom:6px;
+  color:#111;
+}
+
+.tax{
+  font-size:13px;
+  opacity:.5;
+  margin-bottom:34px;
+}
+
+.label{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:14px;
+  display:block;
+}
+
+.label span{
+  opacity:.45;
+}
+
+/* SIZE */
+.size-options{
+  display:flex;
+  gap:12px;
+  margin-bottom:28px;
+}
+
+.size-options button{
+  border:1px solid rgba(0,0,0,.12);
+  background:#fff;
+  padding:14px 22px;
+  border-radius:16px;
+  cursor:pointer;
+  transition:.3s ease;
+  font-weight:500;
+}
+
+.size-options button:hover{
+  background:#111;
+  color:#fff;
+  transform:translateY(-2px);
+}
+
+/* DESC */
+.size{
+  font-size:15px;
+  line-height:1.9;
+  color:#444;
+  margin-bottom:34px;
+}
+
+/* QTY */
+.qty-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:190px;
+  height:56px;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:28px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.03);
+}
+
+.qty-wrap button{
+  width:54px;
+  height:56px;
+  border:none;
+  background:#fff;
+  font-size:20px;
+  font-weight:500;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.qty-wrap button:hover{
+  background:#111;
+  color:#fff;
+}
+
+.qty-value{
+  font-size:17px;
+  font-weight:600;
+}
+
+/* BUTTON */
+.add-to-cart{
+  width:100%;
+  padding:20px;
+  border:none;
+  border-radius:18px;
+  background:#111;
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:.35s ease;
+  box-shadow:0 16px 40px rgba(0,0,0,.10);
+}
+
+.add-to-cart:hover{
+  transform:translateY(-3px);
+  box-shadow:0 24px 55px rgba(0,0,0,.14);
+}
+
+.desc{
+  margin-top:34px;
+  padding-top:26px;
+  border-top:1px solid rgba(0,0,0,.08);
+  font-size:14px;
+  line-height:2;
+  color:#555;
+}
+
+/* TABLET + DESKTOP-LIKE */
+@media(max-width:1024px){
+  .product-page{
+    grid-template-columns:1.55fr .65fr;
+    gap:18px;
+    max-width:100%;
+    padding:0 12px;
+    align-items:start;
+  }
+
+  .product-image{
+    position:sticky;
+    top:85px;
+    width:100%;
+  }
+
+  .slider{
+    width:100%;
+    height:760px;
+    border-radius:20px;
+    background:#fff;
+  }
+
+  .slide{
+    object-fit:contain;
+    border-radius:20px;
+    background:#fff;
+  }
+
+  .product-info{
+    padding-top:0;
+  }
+
+  .product-info h1{
+    font-size:34px;
+    margin-bottom:10px;
+    line-height:1.05;
+  }
+
+  .price{
+    font-size:22px;
+    margin-bottom:4px;
+  }
+
+  .tax{
+    margin-bottom:18px;
+  }
+
+  .size{
+    font-size:13px;
+    line-height:1.6;
+    margin-bottom:18px;
+  }
+
+  .qty-wrap{
+    width:155px;
+    height:48px;
+  }
+
+  .qty-wrap button{
+    width:50px;
+    height:48px;
+    font-size:18px;
+  }
+
+  .qty-value{
+    font-size:16px;
+  }
+
+  .size-options{
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .size-options button{
+    padding:12px 16px;
+    border-radius:14px;
+    font-size:14px;
+  }
+
+  .add-to-cart{
+    padding:16px;
+    font-size:11px;
+    letter-spacing:3px;
+    border-radius:14px;
+  }
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .product-page{
+    grid-template-columns:1fr;
+    padding:0 16px;
+    margin:12px auto 50px;
+    gap:12px;
+  }
+
+.product-image{
+  position:relative;
+  top:auto;
+  height:540px;
+  width:100%;
+  border-radius:28px;
+  overflow:visible;   /* changed */
+}
+
+.slider{
+  height:540px;
+  border-radius:28px;
+  background:transparent;
+  position:relative;
+}
+
+.slide{
+  height:100%;
+  width:100%;
+  object-fit:cover;
+  border-radius:28px;
+  background:transparent;
+  display:block;
+}
+
+/* actual img inside slide */
+.slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:28px;
+  display:block;
+}
+
+
+  .arrow{
+    width:44px;
+    height:44px;
+    font-size:22px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(8px);
+  }
+
+  .prev{
+    left:8px;
+  }
+
+  .next{
+    right:8px;
+  }
+
+  .product-info{
+    padding-top:15px;
+  }
+
+  .product-info h1{
+    font-size:30px;
+    line-height:1.08;
+    margin-bottom:10px;
+  }
+
+  .price{
+    font-size:20px;
+  }
+
+  .tax{
+    margin-bottom:16px;
+  }
+
+  .label{
+    margin-bottom:10px;
+  }
+
+  .size-options{
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:18px;
+  }
+
+  .size-options button{
+    padding:10px 16px;
+    border-radius:12px;
+    font-size:13px;
+  }
+
+  .size{
+    font-size:13px;
+    line-height:1.6;
+    margin-bottom:18px;
+  }
+
+  .qty-wrap{
+    width:150px;
+    height:46px;
+    border-radius:13px;
+    margin-bottom:20px;
+  }
+
+  .qty-wrap button{
+    width:46px;
+    height:46px;
+    font-size:17px;
+  }
+
+  .qty-value{
+    font-size:15px;
+  }
+
+  .add-to-cart{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    font-size:10px;
+    letter-spacing:3px;
+  }
+
+  .desc{
+    margin-top:20px;
+    font-size:13px;
+    line-height:1.8;
+  }
+}
+
+@media(max-width:480px){
+  .product-image{
+    height:360px;
+    border-radius:16px;
+  }
+
+  .slider{
+    height:360px;
+    border-radius:16px;
+  }
+
+  .slide,
+  .slide img{
+    border-radius:16px;
+  }
+}
+</style>
+
+<section class="product-page">
+
+<div class="product-image">
+
+  <div class="slider zoom-wrap" id="zoomWrap">
+    <img src="{{ product.image1.url }}" class="slide active" alt="Product image" id="slideImg">
+
+    {% if product.image2 %}
+    <img src="{{ product.image2.url }}" class="slide" alt="Product image">
+    {% endif %}
+
+    {% if product.image2 %}
+    <button class="arrow prev" type="button">‹</button>
+    <button class="arrow next" type="button">›</button>
+    {% endif %}
+  </div>
+
+  <div class="slider-dots" id="sliderDots"></div>
+
+</div>
+
+<div class="product-info">
+
+  <div class="product-tag">FRIDAY ORIGINALS</div>
+
+  <h1>{{ product.name }}</h1>
+
+  <div class="price">₹{{ product.price }} INR</div>
+  <div class="tax">Taxes included</div>
+
+  <span class="label">Sizes <span>included*</span> <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#sizeGuideModal" class="ms-2 text-decoration-underline text-secondary" style="font-size: 11px; text-transform: none;">Size Guide</a></span>
+
+  <div class="size-options">
+    <button type="button">M</button>
+    <button type="button">L</button>
+    <button type="button">XL</button>
+  </div>
+
+  <div class="size">{{ product.descp }}</div>
+
+  <span class="label">Quantity</span>
+
+  <div class="qty-wrap">
+    <button type="button" id="qty-minus">−</button>
+    <div class="qty-value" id="qty">1</div>
+    <button type="button" id="qty-plus">+</button>
+  </div>
+
+  <button
+    type="button"
+    id="add-cart"
+    class="add-to-cart"
+    data-product-id="{{ product.id }}">
+    Add to Cart
+  </button>
+
+  <div class="desc">
+    Each order contains a set of 3 premium pieces.<br>
+    Premium Fabric · Garment Washed<br>
+    Cold wash · Wash inside out · Do not bleach · Hang dry
+  </div>
+
+</div>
+
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    let currentSlide = 0;
+    let qty = 1;
+    let animating = false;
+
+    const slides = document.querySelectorAll(".slide");
+    const dotsContainer = document.getElementById("sliderDots");
+
+    function updateSlider(nextIndex, dir="next") {
+        if (slides.length <= 1) return;
+        
+        const current = slides[currentSlide];
+        const next = slides[nextIndex];
+        const dots = document.querySelectorAll(".dot");
+
+        animating = true;
+
+        // Reset previous transition classes
+        slides.forEach(s => {
+            s.classList.remove("slide-out-left", "slide-out-right", "slide-from-left");
+        });
+
+        if (dir === "next") {
+            current.classList.remove("active");
+            current.classList.add("slide-out-left");
+            next.classList.add("active");
+        } else {
+            current.classList.remove("active");
+            current.classList.add("slide-out-right");
+            
+            next.classList.add("slide-from-left");
+            next.offsetHeight; // force reflow
+            next.classList.remove("slide-from-left");
+            next.classList.add("active");
+        }
+
+        dots.forEach(d => d.classList.remove("active"));
+        if (dots[nextIndex]) {
+            dots[nextIndex].classList.add("active");
+        }
+
+        currentSlide = nextIndex;
+
+        setTimeout(() => {
+            animating = false;
+        }, 600);
+    }
+
+    if(slides.length > 1){
+      slides.forEach((slide,index)=>{
+          const dot = document.createElement("button");
+          dot.className = "dot" + (index===0 ? " active" : "");
+
+          dot.addEventListener("click", function(){
+              if(animating || currentSlide === index) return;
+              const direction = index > currentSlide ? "next" : "prev";
+              updateSlider(index, direction);
+          });
+
+          dotsContainer.appendChild(dot);
+      });
+    }
+
+    const nextBtn = document.querySelector(".next");
+    const prevBtn = document.querySelector(".prev");
+
+    if(nextBtn && prevBtn){
+      nextBtn.addEventListener("click", function(){
+          if(animating) return;
+          const nextIndex = (currentSlide + 1) % slides.length;
+          updateSlider(nextIndex, "next");
+      });
+
+      prevBtn.addEventListener("click", function(){
+          if(animating) return;
+          const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+          updateSlider(prevIndex, "prev");
+      });
+    }
+
+    document.getElementById("qty-plus").addEventListener("click", function(){
+        qty++;
+        document.getElementById("qty").innerText = qty;
+    });
+
+    document.getElementById("qty-minus").addEventListener("click", function(){
+        if(qty <= 1) return;
+        qty--;
+        document.getElementById("qty").innerText = qty;
+    });
+
+    /* SIZE SELECTION ACTIVE STATE */
+    const sizeBtns = document.querySelectorAll(".size-options button");
+    sizeBtns.forEach(btn => {
+        btn.addEventListener("click", function() {
+            sizeBtns.forEach(b => {
+                b.style.background = "#fff";
+                b.style.color = "#111";
+                b.style.borderColor = "rgba(0,0,0,.12)";
+            });
+            this.style.background = "#111";
+            this.style.color = "#fff";
+            this.style.borderColor = "#111";
+        });
+    });
+
+    /* ZOOM PANNING */
+    const zoomWrap = document.getElementById("zoomWrap");
+    if (zoomWrap) {
+        zoomWrap.addEventListener("mousemove", function(e) {
+            const rect = zoomWrap.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            const activeSlide = zoomWrap.querySelector(".slide.active");
+            if (activeSlide) {
+                activeSlide.style.transformOrigin = x + "% " + y + "%";
+            }
+        });
+        zoomWrap.addEventListener("mouseleave", function() {
+            const activeSlide = zoomWrap.querySelector(".slide.active");
+            if (activeSlide) {
+                activeSlide.style.transformOrigin = "center center";
+            }
+        });
+    }
+
+});
+</script>
+
+{% endblock body %}
