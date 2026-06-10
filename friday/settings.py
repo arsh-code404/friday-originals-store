@@ -191,6 +191,11 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_ADAPTER = 'hii.adapters.CustomSocialAccountAdapter'
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        'APP': {
+            'client_id': os.environ.get('GOOGLE_CLIENT_ID', 'placeholder-client-id.apps.googleusercontent.com'),
+            'secret': os.environ.get('GOOGLE_CLIENT_SECRET', 'placeholder-client-secret'),
+            'key': ''
+        },
         'SCOPE': ['profile', 'email'],
         'AUTH_PARAMS': {
             'access_type': 'online',
