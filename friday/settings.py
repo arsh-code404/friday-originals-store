@@ -156,7 +156,7 @@ STATICFILES_DIRS = [
 ]
 
 # Whitenoise static file serving for production
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles' / 'static'
 
 STORAGES = {
     "default": {
