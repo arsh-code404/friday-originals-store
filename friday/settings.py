@@ -12,8 +12,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -39,7 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
 
     'allauth',
     'allauth.account',
@@ -92,12 +101,14 @@ WSGI_APPLICATION = 'friday.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# SQLite database - uses persistent disk on Render
+# Database configuration - uses external PostgreSQL in production, SQLite locally
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.environ.get('DATABASE_PATH', str(BASE_DIR / 'db.sqlite3')),
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=0,  # Recommended 0 for serverless (Vercel) to prevent connection exhaustion
+        conn_health_checks=False,
+        ssl_require=os.environ.get('DATABASE_URL', '').startswith('postgres://') or os.environ.get('DATABASE_URL', '').startswith('postgresql://')
+    )
 }
 
 
@@ -146,7 +157,15 @@ STATICFILES_DIRS = [
 
 # Whitenoise static file serving for production
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage" if os.environ.get('CLOUDINARY_CLOUD_NAME') else "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 
 AUTHENTICATION_BACKENDS = (
@@ -191,3 +210,18 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'arshunoob120s@gmail.com')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Cloudinary Storage for media files in production
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+print("--- ENVIRONMENT DIAGNOSTICS ---")
+print("DATABASE_URL exists:", "DATABASE_URL" in os.environ)
+if "DATABASE_URL" in os.environ:
+    print("DATABASE_URL prefix:", os.environ.get("DATABASE_URL", "")[:30])
+print("DATABASES config engine:", DATABASES['default']['ENGINE'])
+print("--------------------------------")
+
