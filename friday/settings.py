@@ -218,10 +218,12 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
-print("--- ENVIRONMENT DIAGNOSTICS ---")
-print("DATABASE_URL exists:", "DATABASE_URL" in os.environ)
+import sys
+sys.stderr.write("--- ENVIRONMENT DIAGNOSTICS ---\n")
+sys.stderr.write(f"DATABASE_URL in env: {'DATABASE_URL' in os.environ}\n")
 if "DATABASE_URL" in os.environ:
-    print("DATABASE_URL prefix:", os.environ.get("DATABASE_URL", "")[:30])
-print("DATABASES config engine:", DATABASES['default']['ENGINE'])
-print("--------------------------------")
+    sys.stderr.write(f"DATABASE_URL prefix: {os.environ.get('DATABASE_URL', '')[:25]}\n")
+sys.stderr.write(f"DATABASES config engine: {DATABASES['default']['ENGINE']}\n")
+sys.stderr.write("--------------------------------\n")
+sys.stderr.flush()
 
