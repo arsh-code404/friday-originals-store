@@ -902,37 +902,60 @@ window.checkoutWhatsApp = async function () {
                 `♛ *Friday Originals Order Request*%0A🆔 *Order ID:* ${result.order_id}%0A%0A`
             );
 
-            // Open WhatsApp in a new tab
-            window.open(
-                "https://wa.me/917900010432?text=" + whatsappMsg,
-                "_blank"
-            );
+            const whatsappUrl = "https://wa.me/917900010432?text=" + whatsappMsg;
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-            // Show a premium SweetAlert order placed success popup
-            Swal.fire({
-                title: 'ORDER PLACED!',
-                html: `Your order <strong>${result.order_id}</strong> has been registered.<br><br>We have opened WhatsApp in a new tab to complete your purchase details.`,
-                icon: 'success',
-                background: '#111',
-                color: '#fff',
-                confirmButtonColor: '#fff',
-                confirmButtonText: '<span style="color:#111; font-weight:600; letter-spacing: 1px;">CONTINUE</span>',
-                backdrop: 'rgba(0,0,0,.75)',
-                customClass: {
-                    popup: 'friday-popup'
-                }
-            }).then(() => {
-                // Reload the page to display the empty cart summary page
-                location.reload();
-            });
+            if (isMobile) {
+                // Show a premium SweetAlert order placed success popup
+                Swal.fire({
+                    title: 'ORDER PLACED!',
+                    html: `Your order <strong>${result.order_id}</strong> has been registered.<br><br>We are redirecting you to WhatsApp to complete your purchase details.`,
+                    icon: 'success',
+                    background: '#111',
+                    color: '#fff',
+                    confirmButtonColor: '#fff',
+                    confirmButtonText: '<span style="color:#111; font-weight:600; letter-spacing: 1px;">CONTINUE</span>',
+                    backdrop: 'rgba(0,0,0,.75)',
+                    customClass: {
+                        popup: 'friday-popup'
+                    }
+                }).then(() => {
+                    // Redirect to WhatsApp in mobile/webview context
+                    window.location.href = whatsappUrl;
+                });
+            } else {
+                // Open WhatsApp in a new tab
+                window.open(whatsappUrl, "_blank");
+
+                // Show a premium SweetAlert order placed success popup
+                Swal.fire({
+                    title: 'ORDER PLACED!',
+                    html: `Your order <strong>${result.order_id}</strong> has been registered.<br><br>We have opened WhatsApp in a new tab to complete your purchase details.`,
+                    icon: 'success',
+                    background: '#111',
+                    color: '#fff',
+                    confirmButtonColor: '#fff',
+                    confirmButtonText: '<span style="color:#111; font-weight:600; letter-spacing: 1px;">CONTINUE</span>',
+                    backdrop: 'rgba(0,0,0,.75)',
+                    customClass: {
+                        popup: 'friday-popup'
+                    }
+                }).then(() => {
+                    // Reload the page to display the empty cart summary page
+                    location.reload();
+                });
+            }
         }
     } catch (error) {
         console.error('Error saving order:', error);
         // Fallback: Open WhatsApp anyway
-        window.open(
-            "https://wa.me/917900010432?text=" + msg,
-            "_blank"
-        );
+        const fallbackUrl = "https://wa.me/917900010432?text=" + msg;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+            window.location.href = fallbackUrl;
+        } else {
+            window.open(fallbackUrl, "_blank");
+        }
     }
 };
 </script>
