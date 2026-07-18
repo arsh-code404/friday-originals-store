@@ -53,6 +53,9 @@ body{
   background:#f7f7f7;
   overflow:hidden;
   border-radius:28px;
+  -webkit-backface-visibility:hidden;
+  -webkit-transform:translate3d(0,0,0);
+  isolation:isolate;
 }
 
 .slide{
@@ -70,6 +73,7 @@ body{
     0 8px 22px rgba(0,0,0,.05);
   pointer-events:none;
   z-index:1;
+  -webkit-backface-visibility:hidden;
 }
 
 .slide.active{
@@ -731,6 +735,34 @@ document.addEventListener("DOMContentLoaded", function(){
           const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
           updateSlider(prevIndex, "prev");
       });
+    }
+
+    /* TOUCH SWIPE SUPPORT FOR MOBILE */
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const sliderContainer = document.getElementById("zoomWrap");
+
+    if (sliderContainer && slides.length > 1) {
+        sliderContainer.addEventListener("touchstart", function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        sliderContainer.addEventListener("touchend", function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+    }
+
+    function handleSwipe() {
+        if (animating) return;
+        const swipeThreshold = 50;
+        if (touchEndX < touchStartX - swipeThreshold) {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            updateSlider(nextIndex, "next");
+        } else if (touchEndX > touchStartX + swipeThreshold) {
+            const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlider(prevIndex, "prev");
+        }
     }
 
     document.getElementById("qty-plus").addEventListener("click", function(){

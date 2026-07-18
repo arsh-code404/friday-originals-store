@@ -93,7 +93,7 @@
 
   <section id="new-arrivals" class="py-5 bg-black">
 
-    <div class="container text-centre">
+    <div class="container text-center">
       <h2 class=" text-white text-left py-2 reveal"
         style="font-family: 'Bebas Neue', sans-serif; font-size:22px;margin-top:-30px;">
         New Arrivals!
@@ -109,8 +109,8 @@
 
 
             <!-- SLIDER (NO ARROWS) -->
-            <div id="carousel{{ product.id }}" class="carousel slide product-carousel" data-bs-ride="carousel"
-              data-bs-interval="2200" data-bs-pause="false">
+            <div id="carousel{{ product.id }}" class="carousel slide product-carousel" data-bs-ride="false"
+              data-bs-pause="false">
 
               <!-- DOTS (same like your old one) -->
               <div class="carousel-indicators">
@@ -342,12 +342,19 @@
       /* HERO PARALLAX */
       const heroCarousel = document.getElementById("carouselExampleDark");
       if (heroCarousel) {
+        let ticking = false;
         window.addEventListener("scroll", () => {
-          const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-          const images = heroCarousel.querySelectorAll(".carousel-item img");
-          images.forEach(img => {
-            img.style.transform = "translateY(" + (scrollY * 0.18) + "px) scale(1.05)";
-          });
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+              const images = heroCarousel.querySelectorAll(".carousel-item img");
+              images.forEach(img => {
+                img.style.transform = "translateY(" + (scrollY * 0.18) + "px) scale(1.05)";
+              });
+              ticking = false;
+            });
+            ticking = true;
+          }
         }, { passive: true });
       }
     });

@@ -1,3 +1,8 @@
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -5,7 +10,7 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  padding-right: 0 !important; /* Prevent Bootstrap scrollbar padding jump */
 }
 
 /* =========================
@@ -1399,6 +1404,18 @@ select:focus {
 .cart-btn,
 .profile-btn {
   overflow: visible !important;
+}
+
+/* =========================
+   TOUCH ACTION & SWIPE OVERFLOW PREVENTIONS
+ ========================= */
+.carousel,
+.product-carousel,
+.slider,
+.carousel-inner,
+.carousel-item {
+  touch-action: pan-y;
+  -webkit-user-drag: none;
 }
 
 /* =========================

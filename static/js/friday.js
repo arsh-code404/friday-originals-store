@@ -136,11 +136,18 @@ function initScrollProgress() {
     const progressBar = document.querySelector(".scroll-progress-bar");
     if (!progressBar) return;
 
+    let ticking = false;
     window.addEventListener("scroll", () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-        progressBar.style.width = scrollPercent + "%";
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                progressBar.style.width = scrollPercent + "%";
+                ticking = false;
+            });
+            ticking = true;
+        }
     }, { passive: true });
 }
 
@@ -353,17 +360,24 @@ function initLuxuryIntro() {
     const hanger = intro.querySelector(".hanger-3d");
 
     // 3D Parallax Mouse Move Listener
+    let ticking = false;
     intro.addEventListener("mousemove", function (e) {
-        const rect = intro.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const rect = intro.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
 
-        // Calculate tilt angles (max tilt around 15 degrees)
-        const tiltX = -(y / (rect.height / 2)) * 15;
-        const tiltY = (x / (rect.width / 2)) * 15;
+                // Calculate tilt angles (max tilt around 15 degrees)
+                const tiltX = -(y / (rect.height / 2)) * 15;
+                const tiltY = (x / (rect.width / 2)) * 15;
 
-        if (hanger) {
-            hanger.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                if (hanger) {
+                    hanger.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
     });
 
