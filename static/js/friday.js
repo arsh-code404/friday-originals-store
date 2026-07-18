@@ -181,6 +181,56 @@ function initLazyImages() {
 }
 
 /* =========================
+   LAZY VIDEO LOADING & MOBILE AUTOPLAY ENFORCEMENT
+ ========================= */
+function initLazyVideos() {
+    const lazyVideos = document.querySelectorAll("video.lazy-video");
+    if (!lazyVideos.length) return;
+
+    const playVideoElement = (video) => {
+        if (video.paused) {
+            video.play().catch(err => {
+                // Retry play on first user interaction
+                const forcePlay = () => {
+                    video.play().catch(e => {});
+                    document.removeEventListener("touchstart", forcePlay);
+                    document.removeEventListener("click", forcePlay);
+                };
+                document.addEventListener("touchstart", forcePlay, { passive: true });
+                document.addEventListener("click", forcePlay, { passive: true });
+            });
+        }
+    };
+
+    const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const video = entry.target;
+                const source = video.querySelector("source");
+                if (source && source.dataset.src) {
+                    source.src = source.dataset.src;
+                    video.load();
+                    playVideoElement(video);
+                    video.removeAttribute("preload");
+                }
+                videoObserver.unobserve(video);
+            }
+        });
+    }, { rootMargin: "150px 0px" });
+
+    lazyVideos.forEach(video => {
+        videoObserver.observe(video);
+        
+        // Prevent manual or browser-enforced pausing
+        video.addEventListener("pause", () => {
+            if (video.dataset.userPaused !== "true") {
+                video.play().catch(() => {});
+            }
+        });
+    });
+}
+
+/* =========================
    SMOOTH ANCHOR SCROLLING
 ========================= */
 function initSmoothAnchors() {
@@ -423,6 +473,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initButtonSpotlight();
     initScrollProgress();
     initLazyImages();
+    initLazyVideos();
     initSmoothAnchors();
 
     /* AUTH POPUP */

@@ -453,10 +453,9 @@
     </div>
   </div>
 
-  <!-- MIDDLE VIDEO SECTION -->
   <div class="video-center reveal reveal-delay-4">
-    <video autoplay muted loop playsinline>
-      <source src="{% static 'videos/brand.mp4' %}" type="video/mp4">
+    <video autoplay muted loop playsinline webkit-playsinline preload="none" class="lazy-video">
+      <source data-src="{% static 'videos/brand.mp4' %}" type="video/mp4">
     </video>
   </div>
 
