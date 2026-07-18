@@ -185,48 +185,36 @@ function initLazyImages() {
  ========================= */
 function initLazyVideos() {
     const lazyVideos = document.querySelectorAll("video.lazy-video");
-    if (!lazyVideos.length) return;
+    lazyVideos.forEach(video => {
+        const source = video.querySelector("source");
+        const dataSrc = source ? source.dataset.src : null;
+        if (dataSrc) {
+            // Safari compatibility: set src directly on video element instead of source child
+            video.src = dataSrc;
+            video.load();
+            
+            const playVideo = () => {
+                video.play().catch(err => {
+                    // Autoplay blocked: try playing on user interaction
+                    const forcePlay = () => {
+                        video.play().catch(e => {});
+                        document.removeEventListener("touchstart", forcePlay);
+                        document.removeEventListener("click", forcePlay);
+                    };
+                    document.addEventListener("touchstart", forcePlay, { passive: true });
+                    document.addEventListener("click", forcePlay, { passive: true });
+                });
+            };
 
-    const playVideoElement = (video) => {
-        if (video.paused) {
-            video.play().catch(err => {
-                // Retry play on first user interaction
-                const forcePlay = () => {
-                    video.play().catch(e => {});
-                    document.removeEventListener("touchstart", forcePlay);
-                    document.removeEventListener("click", forcePlay);
-                };
-                document.addEventListener("touchstart", forcePlay, { passive: true });
-                document.addEventListener("click", forcePlay, { passive: true });
+            playVideo();
+
+            // Prevent browser from auto-pausing (e.g. low power mode / visibility change)
+            video.addEventListener("pause", () => {
+                if (video.dataset.userPaused !== "true") {
+                    video.play().catch(() => {});
+                }
             });
         }
-    };
-
-    const videoObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const video = entry.target;
-                const source = video.querySelector("source");
-                if (source && source.dataset.src) {
-                    source.src = source.dataset.src;
-                    video.load();
-                    playVideoElement(video);
-                    video.removeAttribute("preload");
-                }
-                videoObserver.unobserve(video);
-            }
-        });
-    }, { rootMargin: "150px 0px" });
-
-    lazyVideos.forEach(video => {
-        videoObserver.observe(video);
-        
-        // Prevent manual or browser-enforced pausing
-        video.addEventListener("pause", () => {
-            if (video.dataset.userPaused !== "true") {
-                video.play().catch(() => {});
-            }
-        });
     });
 }
 
