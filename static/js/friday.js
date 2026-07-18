@@ -241,7 +241,7 @@ function initPageTransition() {
 
             // Defer scroll reveal until loader overlay fades out
             initScrollReveal();
-        }, 1150);
+        }, 200);
 
         // Handle initial page load with a hash (e.g. /about/#craftsmanship)
         if (window.location.hash) {
@@ -256,7 +256,7 @@ function initPageTransition() {
                         behavior: "smooth"
                     });
                 }
-            }, 1200); // Trigger just as the loader screen starts fading out
+            }, 250); // Trigger just as the loader screen starts fading out
         }
     });
 
@@ -305,7 +305,7 @@ function initPageTransition() {
 
             setTimeout(() => {
                 window.location.href = href;
-            }, 650);
+            }, 200);
         });
     });
 }
